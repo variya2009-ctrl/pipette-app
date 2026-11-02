@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 
 # Настройка страницы в лабораторном стиле
-st.set_page_config(page_title="Умная Пипетка", page_icon="🧪", layout="wide")
+st.set_page_config(page_title="Виртуальный колориметр", page_icon="🧪", layout="wide")
 
 # Кастомный CSS для шрифта и красивого отображения цветных плашек
 st.markdown("""
@@ -27,8 +27,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("# 🧪 ВИРТУАЛЬНЫЙ КОЛОРИМЕТР (УМНАЯ ПИПЕТКА)")
-st.caption("📱 Лабораторный экспресс-анализ концентрации растворов по оптическим координатам RGB")
+st.markdown("# 🧪 ВИРТУАЛЬНЫЙ КОЛОРИМЕТР ")
+st.caption("Лабораторный экспресс-анализ концентрации растворов по оптическим координатам RGB")
 st.write("---")
 
 # Инициализация состояния для дополнительных строк
@@ -66,7 +66,7 @@ def calculate_concentration(known_data, target_rgb):
 col1, col2 = st.columns(2, gap="large")
 
 with col1:
-    st.markdown("## 🟢 ИЗВЕСТНЫЕ РАСТВОРЫ")
+    st.markdown("## 📌 ИЗВЕСТНЫЕ РАСТВОРЫ")
     known_inputs = []
     
     # --- СТРОКА 1: МАКСИМУМ ---
@@ -95,7 +95,7 @@ with col1:
     
     # --- ДИНАМИЧЕСКИЕ СТРОКИ ---
     for i in range(st.session_state.extra_rows):
-        with st.expander(f"🧪 ПРОМЕЖУТОЧНЫЙ РАСТВОР #{i+1}", expanded=True):
+        with st.expander(f" ПРОМЕЖУТОЧНЫЙ РАСТВОР #{i+1}", expanded=True):
             c_cols = st.columns(5)
             with c_cols[0]: dr = st.number_input("R", min_value=0, max_value=255, value=100, key=f"dr_{i}")
             with c_cols[1]: dg = st.number_input("G", min_value=0, max_value=255, value=100, key=f"dg_{i}")
@@ -113,8 +113,8 @@ with col1:
     st.write("---")
     
     # --- ТЕСТИРУЕМЫЙ ОБРАЗЕЦ ---
-    st.markdown("## 🔍 ТЕСТИРУЕМЫЙ ОБРАЗЕЦ")
-    with st.expander("🧪 НЕИЗВЕСТНЫЙ РАСТВОР (ЦЕЛЬ)", expanded=True):
+    st.markdown("##  ТЕСТИРУЕМЫЙ ОБРАЗЕЦ")
+    with st.expander(" НЕИЗВЕСТНЫЙ РАСТВОР (ЦЕЛЬ)", expanded=True):
         c_target_cols = st.columns(5)
         with c_target_cols[0]: target_r = st.number_input("R", min_value=0, max_value=255, value=120, key="t_r")
         with c_target_cols[1]: target_g = st.number_input("G", min_value=0, max_value=255, value=110, key="t_g")
