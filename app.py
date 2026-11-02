@@ -37,9 +37,10 @@ if "extra_rows" not in st.session_state:
 
 # Функция расчета
 def calculate_concentration(known_data, target_rgb):
-    known_rgb = np.array([item[:3] for item in known_data])
-    known_c = np.array([item for item in known_data])
-    target_rgb = np.array(target_rgb)
+    # Разделяем входные данные на цвета и концентрации отдельно
+    known_rgb = np.array([item[:3] for item in known_data], dtype=float)
+    known_c = np.array([item[3] for item in known_data], dtype=float)
+    target_rgb = np.array(target_rgb, dtype=float)
     
     # 1. Вычисления: Метод Евклидова расстояния
     distances = np.linalg.norm(known_rgb - target_rgb, axis=1)
