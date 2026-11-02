@@ -110,15 +110,20 @@ with col1:
         st.rerun()
         
     st.write("---")
+    
+    # --- ТЕСТИРУЕМЫЙ ОБРАЗЕЦ КАК В ИЗВЕСТНЫХ ---
     st.markdown("## 🔍 ТЕСТИРУЕМЫЙ ОБРАЗЕЦ")
-    
-    # Слайдеры для интерактивного подбора цвета цели
-    target_r = st.slider("🔴 Красный канал (R)", 0, 255, 120)
-    target_g = st.slider("🟢 Зелёный канал (G)", 0, 255, 110)
-    target_b = st.slider("🔵 Синий канал (B)", 0, 255, 115)
-    
-    st.markdown("**Цвет искомого раствора:**")
-    st.markdown(f'<div class="color-box" style="background-color: rgb({target_r},{target_g},{target_b}); height: 50px;"></div>', unsafe_allow_html=True)
+    with st.expander("🧪 НЕИЗВЕСТНЫЙ РАСТВОР (ЦЕЛЬ)", expanded=True):
+        c_target_cols = st.columns(5)
+        with c_target_cols[0]: target_r = st.number_input("R", min_value=0, max_value=255, value=120, key="t_r")
+        with c_target_cols[1]: target_g = st.number_input("G", min_value=0, max_value=255, value=110, key="t_g")
+        with c_target_cols[2]: target_b = st.number_input("B", min_value=0, max_value=255, value=115, key="t_b")
+        with c_target_cols[3]: 
+            st.markdown('<div class="color-container"></div>', unsafe_allow_html=True)
+            st.caption("🔍 Ищем конц.")
+        with c_target_cols[4]:
+            st.markdown('<div class="color-container"></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="color-box" style="background-color: rgb({target_r},{target_g},{target_b});"></div>', unsafe_allow_html=True)
 
 with col2:
     st.markdown("## 📊 РЕЗУЛЬТАТЫ ЭКСПРЕСС-АНАЛИЗА")
