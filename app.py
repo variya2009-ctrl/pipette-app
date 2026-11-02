@@ -20,6 +20,10 @@ st.markdown("""
         border: 2px solid #ccc;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
     }
+    /* Смещение превью чуть ниже, чтобы выровнять с полями ввода */
+    .color-container {
+        padding-top: 28px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -34,7 +38,7 @@ if "extra_rows" not in st.session_state:
 # Функция расчета
 def calculate_concentration(known_data, target_rgb):
     known_rgb = np.array([item[:3] for item in known_data])
-    known_c = np.array([item for item in known_data])
+    known_c = np.array([item[3] for item in known_data])
     target_rgb = np.array(target_rgb)
     
     # 1. Вычисления: Метод Евклидова расстояния
@@ -67,24 +71,24 @@ with col1:
     # --- СТРОКА 1: МАКСИМУМ ---
     with st.expander("📈 РАСТВОР МАКСИМАЛЬНОЙ КОНЦЕНТРАЦИИ", expanded=True):
         c_max_cols = st.columns(5)
-        with c_max_cols: max_r = st.number_input("R", min_value=0, max_value=255, value=50, key="max_r")
-        with c_max_cols: max_g = st.number_input("G", min_value=0, max_value=255, value=20, key="max_g")
-        with c_max_cols: max_b = st.number_input("B", min_value=0, max_value=255, value=10, key="max_b")
-        with c_max_cols: max_c = st.number_input("Концентрация", value=16.0, key="max_c")
-        with c_max_cols:
-            st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+        with c_max_cols[0]: max_r = st.number_input("R", min_value=0, max_value=255, value=50, key="max_r")
+        with c_max_cols[1]: max_g = st.number_input("G", min_value=0, max_value=255, value=20, key="max_g")
+        with c_max_cols[2]: max_b = st.number_input("B", min_value=0, max_value=255, value=10, key="max_b")
+        with c_max_cols[3]: max_c = st.number_input("Концентрация", value=16.0, key="max_c")
+        with c_max_cols[4]:
+            st.markdown('<div class="color-container"></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="color-box" style="background-color: rgb({max_r},{max_g},{max_b});"></div>', unsafe_allow_html=True)
         known_inputs.append([max_r, max_g, max_b, max_c])
     
     # --- СТРОКА 2: МИНИМУМ ---
     with st.expander("📉 РАСТВОР МИНИМАЛЬНОЙ КОНЦЕНТРАЦИИ", expanded=True):
         c_min_cols = st.columns(5)
-        with c_min_cols: min_r = st.number_input("R", min_value=0, max_value=255, value=200, key="min_r")
-        with c_min_cols: min_g = st.number_input("G", min_value=0, max_value=255, value=220, key="min_g")
-        with c_min_cols: min_b = st.number_input("B", min_value=0, max_value=255, value=240, key="min_b")
-        with c_min_cols: min_c = st.number_input("Концентрация", value=1.0, key="min_c")
-        with c_min_cols:
-            st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+        with c_min_cols[0]: min_r = st.number_input("R", min_value=0, max_value=255, value=200, key="min_r")
+        with c_min_cols[1]: min_g = st.number_input("G", min_value=0, max_value=255, value=220, key="min_g")
+        with c_min_cols[2]: min_b = st.number_input("B", min_value=0, max_value=255, value=240, key="min_b")
+        with c_min_cols[3]: min_c = st.number_input("Концентрация", value=1.0, key="min_c")
+        with c_min_cols[4]:
+            st.markdown('<div class="color-container"></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="color-box" style="background-color: rgb({min_r},{min_g},{min_b});"></div>', unsafe_allow_html=True)
         known_inputs.append([min_r, min_g, min_b, min_c])
     
@@ -92,12 +96,12 @@ with col1:
     for i in range(st.session_state.extra_rows):
         with st.expander(f"🧪 ПРОМЕЖУТОЧНЫЙ РАСТВОР #{i+1}", expanded=True):
             c_cols = st.columns(5)
-            with c_cols: dr = st.number_input("R", min_value=0, max_value=255, value=100, key=f"dr_{i}")
-            with c_cols: dg = st.number_input("G", min_value=0, max_value=255, value=100, key=f"dg_{i}")
-            with c_cols: db = st.number_input("B", min_value=0, max_value=255, value=100, key=f"db_{i}")
-            with c_cols: dc = st.number_input("Концентрация", value=5.0, key=f"dc_{i}")
-            with c_cols:
-                st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+            with c_cols[0]: dr = st.number_input("R", min_value=0, max_value=255, value=100, key=f"dr_{i}")
+            with c_cols[1]: dg = st.number_input("G", min_value=0, max_value=255, value=100, key=f"dg_{i}")
+            with c_cols[2]: db = st.number_input("B", min_value=0, max_value=255, value=100, key=f"db_{i}")
+            with c_cols[3]: dc = st.number_input("Концентрация", value=5.0, key=f"dc_{i}")
+            with c_cols[4]:
+                st.markdown('<div class="color-container"></div>', unsafe_allow_html=True)
                 st.markdown(f'<div class="color-box" style="background-color: rgb({dr},{dg},{db});"></div>', unsafe_allow_html=True)
             known_inputs.append([dr, dg, db, dc])
         
@@ -136,7 +140,7 @@ with col2:
         
         st.write("")
         st.metric(
-            label="📉 СПОСОБ 2: ЗАКОН БУГЕРА-ЛАМБЕРТА-ВЕРА (СПЕКТР)", 
+            label="📉 СПОСОБ 2: ЗАКОН БУГЕРА-ЛАМБЕРТА-БЕРА (СПЕКТР)", 
             value=f"{beer:.2f} ед.",
             delta="Оптическая плотность",
             delta_color="inverse"
