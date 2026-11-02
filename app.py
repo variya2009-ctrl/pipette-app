@@ -4,17 +4,21 @@ import numpy as np
 # Настройка страницы в лабораторном стиле
 st.set_page_config(page_title="Умная Пипетка", page_icon="🧪", layout="wide")
 
-# Подключаем шрифт Impact для заголовков через кастомный CSS
+# Кастомный CSS для шрифта и красивого отображения цветных плашек
 st.markdown("""
     <style>
-    /* Применяем шрифт Impact к главным заголовкам */
+    /* Применяем шрифт Arial Black / Impact к главным заголовкам для стильного вида */
     h1, h2, h3 {
-        font-family: 'Impact', 'Arial Black', sans-serif !important;
-        letter-spacing: 1px;
+        font-family: 'Arial Black', 'Impact', sans-serif !important;
+        letter-spacing: 0.5px;
     }
-    /* Делаем эмодзи чуть крупнее и красивее */
-    .emoji-style {
-        font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    /* Стиль для цветных плашек-превью */
+    .color-box {
+        width: 100%;
+        height: 38px;
+        border-radius: 8px;
+        border: 2px solid #ccc;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -62,30 +66,39 @@ with col1:
     
     # --- СТРОКА 1: МАКСИМУМ ---
     with st.expander("📈 РАСТВОР МАКСИМАЛЬНОЙ КОНЦЕНТРАЦИИ", expanded=True):
-        c_max_cols = st.columns(4)
-        with c_max_cols[0]: max_r = st.number_input("R", min_value=0, max_value=255, value=50, key="max_r")
-        with c_max_cols[1]: max_g = st.number_input("G", min_value=0, max_value=255, value=20, key="max_g")
-        with c_max_cols[2]: max_b = st.number_input("B", min_value=0, max_value=255, value=10, key="max_b")
-        with c_max_cols[3]: max_c = st.number_input("Концентрация", value=16.0, key="max_c")
+        c_max_cols = st.columns(5)
+        with c_max_cols: max_r = st.number_input("R", min_value=0, max_value=255, value=50, key="max_r")
+        with c_max_cols: max_g = st.number_input("G", min_value=0, max_value=255, value=20, key="max_g")
+        with c_max_cols: max_b = st.number_input("B", min_value=0, max_value=255, value=10, key="max_b")
+        with c_max_cols: max_c = st.number_input("Концентрация", value=16.0, key="max_c")
+        with c_max_cols:
+            st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+            st.markdown(f'<div class="color-box" style="background-color: rgb({max_r},{max_g},{max_b});"></div>', unsafe_allow_html=True)
         known_inputs.append([max_r, max_g, max_b, max_c])
     
     # --- СТРОКА 2: МИНИМУМ ---
     with st.expander("📉 РАСТВОР МИНИМАЛЬНОЙ КОНЦЕНТРАЦИИ", expanded=True):
-        c_min_cols = st.columns(4)
-        with c_min_cols[0]: min_r = st.number_input("R", min_value=0, max_value=255, value=200, key="min_r")
-        with c_min_cols[1]: min_g = st.number_input("G", min_value=0, max_value=255, value=220, key="min_g")
-        with c_min_cols[2]: min_b = st.number_input("B", min_value=0, max_value=255, value=240, key="min_b")
-        with c_min_cols[3]: min_c = st.number_input("Концентрация", value=1.0, key="min_c")
+        c_min_cols = st.columns(5)
+        with c_min_cols: min_r = st.number_input("R", min_value=0, max_value=255, value=200, key="min_r")
+        with c_min_cols: min_g = st.number_input("G", min_value=0, max_value=255, value=220, key="min_g")
+        with c_min_cols: min_b = st.number_input("B", min_value=0, max_value=255, value=240, key="min_b")
+        with c_min_cols: min_c = st.number_input("Концентрация", value=1.0, key="min_c")
+        with c_min_cols:
+            st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+            st.markdown(f'<div class="color-box" style="background-color: rgb({min_r},{min_g},{min_b});"></div>', unsafe_allow_html=True)
         known_inputs.append([min_r, min_g, min_b, min_c])
     
     # --- ДИНАМИЧЕСКИЕ СТРОКИ ---
     for i in range(st.session_state.extra_rows):
         with st.expander(f"🧪 ПРОМЕЖУТОЧНЫЙ РАСТВОР #{i+1}", expanded=True):
-            c_cols = st.columns(4)
-            with c_cols[0]: dr = st.number_input("R", min_value=0, max_value=255, value=100, key=f"dr_{i}")
-            with c_cols[1]: dg = st.number_input("G", min_value=0, max_value=255, value=100, key=f"dg_{i}")
-            with c_cols[2]: db = st.number_input("B", min_value=0, max_value=255, value=100, key=f"db_{i}")
-            with c_cols[3]: dc = st.number_input("Концентрация", value=5.0, key=f"dc_{i}")
+            c_cols = st.columns(5)
+            with c_cols: dr = st.number_input("R", min_value=0, max_value=255, value=100, key=f"dr_{i}")
+            with c_cols: dg = st.number_input("G", min_value=0, max_value=255, value=100, key=f"dg_{i}")
+            with c_cols: db = st.number_input("B", min_value=0, max_value=255, value=100, key=f"db_{i}")
+            with c_cols: dc = st.number_input("Концентрация", value=5.0, key=f"dc_{i}")
+            with c_cols:
+                st.markdown("<label>Цвет</label>", unsafe_allow_html=True)
+                st.markdown(f'<div class="color-box" style="background-color: rgb({dr},{dg},{db});"></div>', unsafe_allow_html=True)
             known_inputs.append([dr, dg, db, dc])
         
     if st.button("➕ ДОБАВИТЬ ТОЧКУ КАЛИБРОВКИ", use_container_width=True):
@@ -99,6 +112,9 @@ with col1:
     target_r = st.slider("🔴 Красный канал (R)", 0, 255, 120)
     target_g = st.slider("🟢 Зелёный канал (G)", 0, 255, 110)
     target_b = st.slider("🔵 Синий канал (B)", 0, 255, 115)
+    
+    st.markdown("**Цвет искомого раствора:**")
+    st.markdown(f'<div class="color-box" style="background-color: rgb({target_r},{target_g},{target_b}); height: 50px;"></div>', unsafe_allow_html=True)
 
 with col2:
     st.markdown("## 📊 РЕЗУЛЬТАТЫ ЭКСПРЕСС-АНАЛИЗА")
@@ -120,7 +136,7 @@ with col2:
         
         st.write("")
         st.metric(
-            label="📉 СПОСОБ 2: ЗАКОН БУГЕРА-ЛАМБЕРТА-БЕРА (СПЕКТР)", 
+            label="📉 СПОСОБ 2: ЗАКОН БУГЕРА-ЛАМБЕРТА-ВЕРА (СПЕКТР)", 
             value=f"{beer:.2f} ед.",
             delta="Оптическая плотность",
             delta_color="inverse"
